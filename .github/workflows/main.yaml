@@ -6,7 +6,7 @@ on:
 
 env:
   FUNCTIONS_NAME: f3brand_oncehub
-  TOPIC_ID: f3brand_oncehub
+  TOPIC_ID: oncehub
 
 jobs:
   setup:
