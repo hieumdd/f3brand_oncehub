@@ -1,0 +1,8 @@
+pandas
+numpy
+pygsheets
+pandas_gbq
+google-cloud-storage
+google-cloud-bigquery
+google-cloud-logging
+tenacity
