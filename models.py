@@ -25,6 +25,8 @@ class OnceHub(metaclass=ABCMeta):
             return Bookings(*args)
         elif table == "Contacts":
             return Contacts(*args)
+        else:
+            raise NotImplementedError(table)
 
     def __init__(self, start, end):
         self.start, self.end = self._get_time_range(start, end)
