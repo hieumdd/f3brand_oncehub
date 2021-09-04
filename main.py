@@ -1,7 +1,8 @@
 import base64
 import json
 
-from models import Bookings
+from models import OnceHub
+
 
 def main(request):
     request_json = request.get_json()
@@ -10,16 +11,15 @@ def main(request):
     data = json.loads(base64.b64decode(data_bytes).decode("utf-8"))
     print(data)
 
-    job = Bookings(
-        data.get('start'),
-        data.get('end'),
+    job = OnceHub.factory(
+        data["table"],
+        data.get("start"),
+        data.get("end"),
     )
     results = job.run()
     response = {
         "pipelines": "OnceHub",
-        "results": results
+        "results": results,
     }
     print(response)
     return response
-
-    

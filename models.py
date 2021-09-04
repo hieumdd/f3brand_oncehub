@@ -18,6 +18,14 @@ DATASET = "api_extracted_data"
 
 
 class OnceHub(metaclass=ABCMeta):
+    @staticmethod
+    def factory(table, start, end):
+        args = (start, end)
+        if table == "Bookings":
+            return Bookings(*args)
+        elif table == "Contacts":
+            return Contacts(*args)
+
     def __init__(self, start, end):
         self.start, self.end = self._get_time_range(start, end)
 
@@ -83,6 +91,8 @@ class OnceHub(metaclass=ABCMeta):
         pass
 
     def _load(self, rows):
+        # with open("test.json", "w") as f:
+        #     json.dump(rows, f)
         return BQ_CLIENT.load_table_from_json(
             rows,
             f"{DATASET}._stage_{self.table}",
@@ -126,137 +136,43 @@ class Bookings(OnceHub):
     endpoint = "bookings"
     table = "new_oncehub_bookings"
     schema = [
-        {
-            "name": "id",
-            "type": "STRING",
-        },
-        {
-            "name": "last_updated_time",
-            "type": "TIMESTAMP",
-        },
-        {
-            "name": "starting_time",
-            "type": "STRING",
-        },
-        {
-            "name": "status",
-            "type": "STRING",
-        },
-        {
-            "name": "subject",
-            "type": "STRING",
-        },
-        {
-            "name": "tracking_id",
-            "type": "STRING",
-        },
-        {
-            "name": "form_submission_company",
-            "type": "STRING",
-        },
-        {
-            "name": "form_submission_email",
-            "type": "STRING",
-        },
-        {
-            "name": "form_submission_guests",
-            "type": "STRING",
-        },
-        {
-            "name": "form_submission_mobile_phone",
-            "type": "STRING",
-        },
-        {
-            "name": "form_submission_name",
-            "type": "STRING",
-        },
-        {
-            "name": "form_submission_note",
-            "type": "STRING",
-        },
-        {
-            "name": "form_submission_phone",
-            "type": "STRING",
-        },
-        {
-            "name": "booking_page",
-            "type": "STRING",
-        },
-        {
-            "name": "cancel_reschedule_information_actioned_by",
-            "type": "STRING",
-        },
-        {
-            "name": "cancel_reschedule_information_reason",
-            "type": "STRING",
-        },
-        {
-            "name": "cancel_reschedule_information_user_id",
-            "type": "STRING",
-        },
-        {
-            "name": "creation_time",
-            "type": "STRING",
-        },
-        {
-            "name": "customer_timezone",
-            "type": "STRING",
-        },
-        {
-            "name": "duration_minutes",
-            "type": "INTEGER",
-        },
-        {
-            "name": "event_type",
-            "type": "STRING",
-        },
-        {
-            "name": "external_calendar_event_id",
-            "type": "STRING",
-        },
-        {
-            "name": "external_calendar_id",
-            "type": "STRING",
-        },
-        {
-            "name": "external_calendar_name",
-            "type": "STRING",
-        },
-        {
-            "name": "external_calendar_type",
-            "type": "STRING",
-        },
-        {
-            "name": "in_trash",
-            "type": "BOOLEAN",
-        },
-        {
-            "name": "location_description",
-            "type": "STRING",
-        },
-        {
-            "name": "master_page",
-            "type": "STRING",
-        },
-        {
-            "name": "object",
-            "type": "STRING",
-        },
-        {
-            "name": "owner",
-            "type": "STRING",
-        },
-        {
-            "name": "rescheduled_booking_id",
-            "type": "STRING",
-        },
-        {
-            "name": "virtual_conferencing_join_url",
-            "type": "STRING",
-        },
+        {"name": "id", "type": "STRING"},
+        {"name": "last_updated_time", "type": "TIMESTAMP"},
+        {"name": "starting_time", "type": "STRING"},
+        {"name": "status", "type": "STRING"},
+        {"name": "subject", "type": "STRING"},
+        {"name": "tracking_id", "type": "STRING"},
+        {"name": "form_submission_company", "type": "STRING"},
+        {"name": "form_submission_email", "type": "STRING"},
+        {"name": "form_submission_guests", "type": "STRING"},
+        {"name": "form_submission_mobile_phone", "type": "STRING"},
+        {"name": "form_submission_name", "type": "STRING"},
+        {"name": "form_submission_note", "type": "STRING"},
+        {"name": "form_submission_phone", "type": "STRING"},
+        {"name": "booking_page", "type": "STRING"},
+        {"name": "cancel_reschedule_information_actioned_by", "type": "STRING"},
+        {"name": "cancel_reschedule_information_reason", "type": "STRING"},
+        {"name": "cancel_reschedule_information_user_id", "type": "STRING"},
+        {"name": "creation_time", "type": "STRING"},
+        {"name": "customer_timezone", "type": "STRING"},
+        {"name": "duration_minutes", "type": "INTEGER"},
+        {"name": "event_type", "type": "STRING"},
+        {"name": "external_calendar_event_id", "type": "STRING"},
+        {"name": "external_calendar_id", "type": "STRING"},
+        {"name": "external_calendar_name", "type": "STRING"},
+        {"name": "external_calendar_type", "type": "STRING"},
+        {"name": "in_trash", "type": "BOOLEAN"},
+        {"name": "location_description", "type": "STRING"},
+        {"name": "master_page", "type": "STRING"},
+        {"name": "object", "type": "STRING"},
+        {"name": "owner", "type": "STRING"},
+        {"name": "rescheduled_booking_id", "type": "STRING"},
+        {"name": "virtual_conferencing_join_url", "type": "STRING"},
     ]
     keys = {
-        "p_key": ["id",],
+        "p_key": [
+            "id",
+        ],
         "incre_key": "last_updated_time",
     }
 
@@ -315,6 +231,68 @@ class Bookings(OnceHub):
                 "virtual_conferencing_join_url": row.get(
                     "virtual_conferencing_join_url"
                 ),
+            }
+            for row in rows
+        ]
+
+
+class Contacts(OnceHub):
+    endpoint = "contacts"
+    table = "new_oncehub_contacts"
+    schema = [
+        {"name": "id", "type": "STRING"},
+        {"name": "last_updated_time", "type": "TIMESTAMP"},
+        {"name": "creation_time", "type": "TIMESTAMP"},
+        {"name": "owner", "type": "STRING"},
+        {"name": "city", "type": "STRING"},
+        {"name": "company_size", "type": "STRING"},
+        {"name": "company", "type": "STRING"},
+        {"name": "country", "type": "STRING"},
+        {"name": "email", "type": "STRING"},
+        {"name": "employees", "type": "STRING"},
+        {"name": "first_name", "type": "STRING"},
+        {"name": "job_title", "type": "STRING"},
+        {"name": "last_name", "type": "STRING"},
+        {"name": "mobile_phone", "type": "STRING"},
+        {"name": "phone", "type": "STRING"},
+        {"name": "post_code", "type": "STRING"},
+        {"name": "salutation", "type": "STRING"},
+        {"name": "state", "type": "STRING"},
+        {"name": "street_address", "type": "STRING"},
+        {"name": "terms_of_service", "type": "STRING"},
+        {"name": "timezone", "type": "STRING"},
+    ]
+    keys = {
+        "p_key": [
+            "id",
+        ],
+        "incre_key": "last_updated_time",
+    }
+
+    def transform(self, rows):
+        return [
+            {
+                "id": row["id"],
+                "last_updated_time": row["last_updated_time"],
+                "creation_time": row.get("creation_time"),
+                "owner": row.get("owner"),
+                "city": row.get("city"),
+                "company_size": row.get("company_size"),
+                "company": row.get("company"),
+                "country": row.get("country"),
+                "email": row.get("email"),
+                "employees": row.get("employees"),
+                "first_name": row.get("first_name"),
+                "job_title": row.get("job_title"),
+                "last_name": row.get("last_name"),
+                "mobile_phone": row.get("mobile_phone"),
+                "phone": row.get("phone"),
+                "post_code": row.get("post_code"),
+                "salutation": row.get("salutation"),
+                "state": row.get("state"),
+                "street_address": row.get("street_address"),
+                "terms_of_service": row.get("terms_of_service"),
+                "timezone": row.get("timezone"),
             }
             for row in rows
         ]
