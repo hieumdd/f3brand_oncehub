@@ -6,8 +6,8 @@ TABLES = [
     "Bookings",
     "Contacts",
 ]
-START = "2021-07-01"
-END = "2021-07-10"
+START = "2021-07-14"
+END = "2021-09-05"
 
 
 @pytest.mark.parametrize("table", TABLES)

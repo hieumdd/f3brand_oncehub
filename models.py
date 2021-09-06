@@ -189,50 +189,82 @@ class Bookings(OnceHub):
                 "tracking_id": row.get("tracking_id"),
                 "form_submission_company": json.dumps(
                     row.get("form_submission").get("company")
-                ),
-                "form_submission_email": row.get("form_submission").get("email"),
+                )
+                if row.get("form_submission")
+                else None,
+                "form_submission_email": row.get("form_submission").get("email")
+                if row.get("form_submission")
+                else None,
                 "form_submission_guests": json.dumps(
                     row.get("form_submission").get("guests")
-                ),
+                )
+                if row.get("form_submission")
+                else None,
                 "form_submission_mobile_phone": json.dumps(
                     row.get("form_submission").get("mobile_phone")
-                ),
+                )
+                if row.get("form_submission")
+                else None,
                 "form_submission_name": json.dumps(
                     row.get("form_submission").get("name")
-                ),
+                )
+                if row.get("form_submission")
+                else None,
                 "form_submission_note": json.dumps(
                     row.get("form_submission").get("note")
-                ),
+                )
+                if row.get("form_submission")
+                else None,
                 "form_submission_phone": json.dumps(
                     row.get("form_submission").get("phone")
-                ),
+                )
+                if row.get("form_submission")
+                else None,
                 "booking_page": row.get("booking_page"),
                 "cancel_reschedule_information_actioned_by": row.get(
-                    "cancel_reschedule_information_actioned_by"
-                ),
+                    "cancel_reschedule_information"
+                ).get("actioned_by")
+                if row.get("cancel_reschedule_information")
+                else None,
                 "cancel_reschedule_information_reason": row.get(
-                    "cancel_reschedule_information_reason"
-                ),
+                    "cancel_reschedule_information"
+                ).get("reason")
+                if row.get("cancel_reschedule_information")
+                else None,
                 "cancel_reschedule_information_user_id": row.get(
-                    "cancel_reschedule_information_user_id"
-                ),
+                    "cancel_reschedule_information"
+                ).get("user_id")
+                if row.get("cancel_reschedule_information")
+                else None,
                 "creation_time": row.get("creation_time"),
                 "customer_timezone": row.get("customer_timezone"),
                 "duration_minutes": row.get("duration_minutes"),
                 "event_type": row.get("event_type"),
-                "external_calendar_event_id": row.get("external_calendar_event_id"),
-                "external_calendar_id": row.get("external_calendar_id"),
-                "external_calendar_name": row.get("external_calendar_name"),
-                "external_calendar_type": row.get("external_calendar_type"),
+                "external_calendar_event_id": row.get("external_calendar").get(
+                    "event_id"
+                )
+                if row.get("external_calendar")
+                else None,
+                "external_calendar_id": row.get("external_calendar").get("id")
+                if row.get("external_calendar")
+                else None,
+                "external_calendar_name": row.get("external_calendar").get("name")
+                if row.get("external_calendar")
+                else None,
+                "external_calendar_type": row.get("external_calendar").get("type")
+                if row.get("external_calendar")
+                else None,
                 "in_trash": row.get("in_trash"),
                 "location_description": row.get("location_description"),
                 "master_page": row.get("master_page"),
                 "object": row.get("object"),
                 "owner": row.get("owner"),
                 "rescheduled_booking_id": row.get("rescheduled_booking_id"),
-                "virtual_conferencing_join_url": row.get(
-                    "virtual_conferencing_join_url"
-                ),
+                "virtual_conferencing_join_url": row.get("virtual_conferencing").get(
+                    "join_url"
+                )
+                if row.get("virtual_conferencing")
+                else None,
             }
             for row in rows
         ]
