@@ -79,12 +79,17 @@ class OnceHub(metaclass=ABCMeta):
                     params=params,
                     headers=HEADERS,
                 ) as r:
+                    print(r.links.get('next'))
+                    if not r.links.get('next'):
+                        r
                     res = r.json()
                 _rows = res["data"]
                 if _rows:
                     rows.extend(_rows)
+                    print(_rows[-1]["id"])
                     params["after"] = _rows[-1]["id"]
                 else:
+                    _rows
                     break
         return rows
 
